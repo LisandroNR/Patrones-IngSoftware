@@ -23,10 +23,11 @@ Se enfocan en los mecanismos de creación de objetos.
 
 ### Patrones de Comportamiento
 *   **Chain of Responsibility:** Permite pasar solicitudes a lo largo de una cadena de manejadores. Cada clase se encarga de realizar una única tarea sobre la solicitud.
+*   **Command:** Convierte una solicitud o petición en un objeto independiente que contiene toda la información sobre la misma, permitiendo parametrizar objetos con diferentes operaciones, poner en cola solicitudes y desacoplar al emisor del receptor.
 *   **Memento:** Permite guardar y restaurar el estado previo de un objeto sin revelar los detalles de su implementación.
 *   **Observer:** Permite definir un mecanismo de suscripción para notificar a varios objetos sobre cualquier evento que les suceda al objeto que están observando.
 *   **State:** Permite a un objeto alterar su comportamiento cuando su estado interno cambia. Sustituye extensas cadenas de switch o if-else dependientes del estado por polimorfismo limpio.
-*   **Strategy:** Permite definir una familia de algoritmos, colocar cada uno en una clase separada y hacer que sus objetos sean intercambiables. 
+*   **Strategy:** Permite definir una familia de algoritmos, colocar cada uno en una clase separada y hacer que sus objetos sean intercambiables.  
 
 ### 4. Patrón Decorator (Estructural)
 * **Propósito:** Permitir añadir funcionalidades de manera dinámica a un objeto envolviéndolo en clases contenedoras (decoradores) que comparten la misma interfaz, ofreciendo una alternativa flexible a la herencia para extender comportamientos.
@@ -99,37 +100,39 @@ ReadyState, PlayingState, LockedState (Estados Concretos): Implementan las reacc
 
 * **Punto de Entrada:** MainState.java.
 
+### 9. Patrón Command (Comportamiento)
+* **Propósito:** Encapsular una solicitud como un objeto independiente, permitiendo parametrizar clientes con diferentes peticiones, encolar operaciones y desacoplar por completo al objeto que invoca la acción (el control remoto) del objeto que la ejecuta (el receptor / la luz).
+* **Ubicación:** Carpeta `Command/`.
+* **Estructura implementada:**
+`Comando` (Interfaz Command): Declara el contrato común (`ejecutar()`) para todos los comandos.
+
+`Luz` (Receptor / Receiver): Conoce cómo llevar a cabo las operaciones asociadas a la solicitud (encender y apagar la luz).
+
+`ComandoEncenderLuz` y `ComandoApagarLuz` (Comandos Concretos): Implementan la interfaz y vinculan la acción específica con las llamadas correspondientes sobre el receptor.
+
+`ControlRemoto` (Invocador / Invoker): Pide al comando que ejecute la solicitud (`presionarBoton()`) sin conocer los detalles de cómo se realiza ni quién la recibe.
+
+`MainCommand` (Cliente): Configura el receptor, crea los comandos y los asocia al invocador para poner a prueba el desacoplamiento.
+* **Punto de Entrada:** `MainCommand.java`.
+
 ## 🚀 Instrucciones de Ejecución
 
 El código fuente de este proyecto está desarrollado en **Java**. Para ejecutar los ejemplos de implementación de cada patrón, sigue estos pasos:
 
-<<<<<<< HEAD
 1. **Clonar el repositorio:**
+   ```bash
    git clone https://github.com/LisandroNR/Patrones-IngSoftware.git
-   
+   cd Patrones-IngSoftware
+   ```
+
 2. **Abrir el proyecto:**
-   Abre la carpeta raíz del repositorio en un entorno de desarrollo compatible con Java.
-   
+   Abre la carpeta raíz del repositorio en un entorno de desarrollo compatible con Java (como VS Code, IntelliJ IDEA o Eclipse).
+
 3. **Ejecutar los patrones:**
-   Cada patrón de diseño se encuentra encapsulado en su propia subcarpeta. 
-   * Navega hasta la carpeta del patrón que deseas probar.
-   * Abre el archivo principal que contiene la clase ejecutora.
-   * Ejecuta el archivo para visualizar la salida en la terminal.
-=======
-### Clonar el repositorio
-```bash
-git clone <https://github.com/LisandroNR/Tp-N-1-Ingenieria-de-software.git>
-cd Tp-N-1-Ingenieria-de-software
-
-Ejecución del Patrón Observer/Strategy/Singleton/Decorator/Facade
-Para compilar y ejecutar el ejemplo del patrón Observer/Strategy/Singleton/Decorator/Facade/ChainOfResponsibility:
-
-Ingresar al directorio del patrón
-cd Observer/Strategy/Singleton/Decorator/Facade/ChainOfResponsibility
-
-Compilar los archivos Java:
-javac *.java
-
-Ejecutar la clase principal
-java MainObserver/MainStrategy/MainSingleton/MainDecorator/MainFacade/MainCHOR
+   Cada patrón de diseño se encuentra encapsulado en su propia subcarpeta.
+   Por ejemplo, para compilar y ejecutar el patrón **Command**:
+   ```bash
+   javac Command/*.java
+   java Command.MainCommand
+   ```
 

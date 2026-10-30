@@ -1,10 +1,6 @@
 package Command;
 
-/**
- * Interfaz Command (Comando).
- * Define el contrato estándar para todas las órdenes.
- * Todos los comandos tienen que tener un método ejecutar().
- */
+// interfaz, define que deben hacer todos los comandos (ejecutar)
 public interface Comando {
     void ejecutar();
 }

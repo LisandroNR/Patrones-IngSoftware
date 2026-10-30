@@ -1,26 +1,24 @@
 package Command;
 
-/**
- * Clase Invoker (Invocador).
- * Es quien pide que se ejecute una acción.
- * Por ejemplo: un control remoto con un botón.
- * Al control remoto no le importa qué hace el comando por dentro; solo sabe llamar a ejecutar().
- */
-public class ControlRemoto {
-    private Comando comando;
+// es el control remoto
+// pide q se ejecute una accion
+// no le importa q hace el comando, solo lo ejecuta
 
-    // Permite cambiar el comando que tiene asignado el botón en cualquier momento
+public class ControlRemoto {
+    private Comando comando; // guarda la orden
+
+    // permite cambiar el comando (prendido / apagado)
     public void setComando(Comando comando) {
         this.comando = comando;
     }
 
-    // Cuando se aprieta el botón, se dispara la orden
+    // al apretar el boton, se dispara la orden
     public void presionarBoton() {
-        if (comando != null) {
+        if (comando != null) { // si hay una orden asignada
             System.out.println("[Control Remoto] Botón presionado...");
-            comando.ejecutar();
-        } else {
-            System.out.println("[Control Remoto] Ningún comando asignado.");
+            comando.ejecutar(); // ejecuta la orden
+        } else { // si no hay una orden asignada
+            System.out.println("[Control Remoto] No se programó el botón.");
         }
     }
 }

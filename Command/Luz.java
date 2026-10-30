@@ -1,22 +1,21 @@
 package Command;
 
-/**
- * Clase Receiver (Receptor).
- * Es el dispositivo o componente real que sabe cómo realizar el trabajo.
- * En este caso, la luz sabe prenderse y apagarse.
- */
+// clase q sabe como realizar el trabajo
 public class Luz {
-    private String ubicacion;
+    private String ubicacion; // guarda en q lugar está la luz, para diferenciarla de otras luces
 
+    // constructor
     public Luz(String ubicacion) {
         this.ubicacion = ubicacion;
     }
 
+    // metodo q prende la luz
     public void encender() {
-        System.out.println("-> [Luz de " + ubicacion + "] Encendida (brilla en la habitación).");
+        System.out.println("-> [Luz de " + ubicacion + "] prendida");
     }
 
+    // metodo q apaga la luz
     public void apagar() {
-        System.out.println("-> [Luz de " + ubicacion + "] Apagada (habitación a oscuras).");
+        System.out.println("-> [Luz de " + ubicacion + "] apagada");
     }
 }

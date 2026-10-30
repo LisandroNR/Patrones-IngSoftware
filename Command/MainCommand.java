@@ -1,38 +1,28 @@
 package Command;
 
-/**
- * Clase Client (Main).
- * Es quien arma la escena: crea el receptor (la luz), crea los comandos
- * y se los pasa al invocador (el control remoto).
- */
+// probamos el patron
+
 public class MainCommand {
     public static void main(String[] args) {
-        System.out.println("==================================================");
-        System.out.println("DEMOSTRACIÓN DEL PATRÓN COMMAND");
-        System.out.println("==================================================");
 
-        // 1. Creamos el objeto Receptor (el que realmente sabe hacer las cosas)
+        // creamos el receptor (luz)
         Luz luzLiving = new Luz("Living");
 
-        // 2. Creamos los Comandos envolviendo las acciones de la luz
+        // creamos los comandos (encender/apagar)
         Comando ordenEncender = new ComandoEncenderLuz(luzLiving);
         Comando ordenApagar = new ComandoApagarLuz(luzLiving);
 
-        // 3. Creamos el Invocador (el control remoto)
+        // creamos el invocador (control remoto)
         ControlRemoto control = new ControlRemoto();
 
-        // 4. Le cargamos la orden de encender y apretamos el botón
+        // programamos el boton para encender y apretamos
         System.out.println("\n--- Programamos el botón para ENCENDER ---");
         control.setComando(ordenEncender);
         control.presionarBoton();
 
-        // 5. Cambiamos la orden del botón para APAGAR y volvemos a apretar
+        // cambiamos la orden para apagar
         System.out.println("\n--- Reprogramamos el botón para APAGAR ---");
         control.setComando(ordenApagar);
         control.presionarBoton();
-
-        System.out.println("\n==================================================");
-        System.out.println("FIN DE LA DEMOSTRACIÓN");
-        System.out.println("==================================================");
     }
 }

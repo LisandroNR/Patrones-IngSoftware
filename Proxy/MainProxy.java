@@ -1,32 +1,20 @@
 package Proxy;
 
-/**
- * Clase Main (Cliente).
- * Prueba el funcionamiento del patrón Proxy.
- */
+// probamos el funcionamiento
+
 public class MainProxy {
     public static void main(String[] args) {
-        System.out.println("==================================================");
-        System.out.println("PASO 1: Creamos el objeto usando el Proxy");
-        System.out.println("==================================================");
-        // Fíjate que usamos el tipo de la interfaz (Imagen)
-        // El programa cliente no sabe ni le importa si es el proxy o el objeto real
+        System.out.println("1: creamos el objeto usando el Proxy");
+        // se crea el proxy usando la interfaz imagen
+        // todavia no se carga la imagen real
         Imagen miFoto = new ImagenProxy("paisaje_ultra_hd_4k.png");
 
-        System.out.println("\n--------------------------------------------------");
-        System.out.println("PASO 2: Llamamos a mostrar() por primera vez");
-        System.out.println("--------------------------------------------------");
-        // Acá el proxy detecta que es la primera vez y carga la foto real
+        System.out.println("\n2: llamamos a mostrar() por primera vez");
+        // el proxy detecta q es la primera vez y carga la imagen real
         miFoto.mostrar();
 
-        System.out.println("\n--------------------------------------------------");
-        System.out.println("PASO 3: Llamamos a mostrar() por segunda vez");
-        System.out.println("--------------------------------------------------");
-        // Acá el proxy se da cuenta de que ya la tiene cargada y no pierde tiempo
+        System.out.println("\n3: llamamos a mostrar() por segunda vez");
+        // el proxy se da cuenta de q ya la tiene cargada y la muestra directamente
         miFoto.mostrar();
-
-        System.out.println("\n==================================================");
-        System.out.println("FIN DE LA DEMOSTRACIÓN");
-        System.out.println("==================================================");
     }
 }

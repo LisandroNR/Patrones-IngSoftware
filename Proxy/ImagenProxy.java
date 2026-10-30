@@ -1,35 +1,26 @@
 package Proxy;
 
-/**
- * Clase Proxy (Intermediario).
- * Se hace pasar por la ImagenReal (porque implementa la interfaz Imagen).
- * 
- * ¿Cuál es su gracia?
- * Controla el acceso al objeto real:
- * 1. Carga perezosa (Lazy loading): No crea la foto pesada al inicio, 
- *    espera hasta que alguien realmente pida verla con mostrar().
- * 2. Memoria / Caché: Guarda la imagen en una variable para no tener que
- *    volver a leer del disco si nos piden verla de nuevo.
- */
-public class ImagenProxy implements Imagen {
-    private String nombreArchivo;
-    
-    // Esta variable guarda la referencia al objeto pesado real.
-    // Al principio está en 'null' (vacía), no gastamos memoria en nada.
-    private ImagenReal imagenReal;
+// intermediario, se hace pasar por ImagenReal
+// no se crea el archivo pesado al inicio, espera a que alguien lo pida
+// guarda la imagen en una variable para no tener que volver a cargarla
 
+public class ImagenProxy implements Imagen { // implementa el metodo de la interfaz
+    private String nombreArchivo; // guarda texto con el nombre de la foto
+    private ImagenReal imagenReal;// variable q guarda la referencia al objeto pesado, empieza vacia
+
+    // constructor, recibe el nombre del archivo
     public ImagenProxy(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
         System.out.println("[Proxy] Objeto proxy creado para '" + nombreArchivo + "'. (Todavía NO se cargó nada pesado).");
     }
 
     @Override
-    public void mostrar() {
-        // ¿Es la primera vez que piden mostrarla?
+    public void mostrar() { // metodo mostrar
+        // si no hay imagen real
         if (imagenReal == null) {
             System.out.println("[Proxy] Es la primera vez que se pide mostrar. Creando y cargando ImagenReal...");
-            imagenReal = new ImagenReal(nombreArchivo);
-        } else {
+            imagenReal = new ImagenReal(nombreArchivo); // crea la imagen real y la guarda en la variable
+        } else { // si ya había
             System.out.println("[Proxy] La imagen ya estaba cargada. Usamos la que ya tenemos en memoria (Caché).");
         }
 

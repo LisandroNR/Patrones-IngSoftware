@@ -20,6 +20,7 @@ Se enfocan en los mecanismos de creación de objetos.
 *   **Adapter:** Permite la colaboración entre objetos con interfaces incompatibles. Separa la lógica de traducción de la lógica de negocio.
 *   **Decorator:** Permite comprimir y encriptar información sensible, independientemente del código que utilice esos datos. Suma comportamientos a un objeto sin tener que crear subclases nuevas.
 *   **Facade:** Proporciona una interfaz simplificada a una biblioteca, un framework o cualquier otro grupo complejo de clases. 
+*   **Proxy:** Proporciona un sustituto o intermediario para controlar el acceso a un objeto, permitiendo realizar operaciones como carga perezosa (lazy loading) o almacenamiento en caché. 
 
 ### Patrones de Comportamiento
 *   **Chain of Responsibility:** Permite pasar solicitudes a lo largo de una cadena de manejadores. Cada clase se encarga de realizar una única tarea sobre la solicitud.
@@ -99,37 +100,37 @@ ReadyState, PlayingState, LockedState (Estados Concretos): Implementan las reacc
 
 * **Punto de Entrada:** MainState.java.
 
+### 9. Patrón Proxy (Estructural)
+* **Propósito:** Proporcionar un intermediario o sustituto de otro objeto para controlar el acceso al mismo. Permite postergar operaciones pesadas hasta que sean realmente necesarias (carga perezosa o lazy loading) y almacenar resultados en memoria (caché) para optimizar el rendimiento.
+* **Ubicación:** Carpeta `Proxy/`.
+* **Estructura implementada:**
+`Imagen` (Interfaz Común): Define el contrato estándar (`mostrar()`) que deben cumplir tanto el objeto real como el proxy.
+
+`ImagenReal` (Sujeto Real): Objeto que realiza la operación costosa (simula la lectura y carga de una imagen pesada en memoria desde el almacenamiento).
+
+`ImagenProxy` (Proxy): Intermediario que mantiene una referencia a `ImagenReal`. Solo instancia y carga la imagen real la primera vez que se solicita su visualización, reutilizándola en llamadas posteriores para no repetir la carga pesada.
+
+`MainProxy` (Cliente): Interactúa con la interfaz `Imagen` a través del proxy sin necesidad de conocer los detalles de la carga pesada ni cuándo se realiza.
+* **Punto de Entrada:** `MainProxy.java`.
+
 ## 🚀 Instrucciones de Ejecución
 
 El código fuente de este proyecto está desarrollado en **Java**. Para ejecutar los ejemplos de implementación de cada patrón, sigue estos pasos:
 
-<<<<<<< HEAD
 1. **Clonar el repositorio:**
+   ```bash
    git clone https://github.com/LisandroNR/Patrones-IngSoftware.git
-   
+   cd Patrones-IngSoftware
+   ```
+
 2. **Abrir el proyecto:**
-   Abre la carpeta raíz del repositorio en un entorno de desarrollo compatible con Java.
-   
+   Abre la carpeta raíz del repositorio en un entorno de desarrollo compatible con Java (como VS Code, IntelliJ IDEA o Eclipse).
+
 3. **Ejecutar los patrones:**
-   Cada patrón de diseño se encuentra encapsulado en su propia subcarpeta. 
-   * Navega hasta la carpeta del patrón que deseas probar.
-   * Abre el archivo principal que contiene la clase ejecutora.
-   * Ejecuta el archivo para visualizar la salida en la terminal.
-=======
-### Clonar el repositorio
-```bash
-git clone <https://github.com/LisandroNR/Tp-N-1-Ingenieria-de-software.git>
-cd Tp-N-1-Ingenieria-de-software
-
-Ejecución del Patrón Observer/Strategy/Singleton/Decorator/Facade
-Para compilar y ejecutar el ejemplo del patrón Observer/Strategy/Singleton/Decorator/Facade/ChainOfResponsibility:
-
-Ingresar al directorio del patrón
-cd Observer/Strategy/Singleton/Decorator/Facade/ChainOfResponsibility
-
-Compilar los archivos Java:
-javac *.java
-
-Ejecutar la clase principal
-java MainObserver/MainStrategy/MainSingleton/MainDecorator/MainFacade/MainCHOR
+   Cada patrón de diseño se encuentra encapsulado en su propia subcarpeta.
+   Por ejemplo, para compilar y ejecutar el patrón **Proxy**:
+   ```bash
+   javac Proxy/*.java
+   java Proxy.MainProxy
+   ```
 

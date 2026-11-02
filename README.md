@@ -133,3 +133,122 @@ javac *.java
 Ejecutar la clase principal
 java MainObserver/MainStrategy/MainSingleton/MainDecorator/MainFacade/MainCHOR
 
+# Ejemplos Prácticos de los Principios S.O.L.I.D. en Java
+
+Este repositorio contiene una implementación didáctica, completa y ejecutable de los **5 principios de diseño de software S.O.L.I.D.** en Java. Para cada principio se incluye el contraejemplo (violación del principio o anti-patrón) y la solución recomendada aplicando el principio correspondiente.
+
+---
+
+## 🧭 Estructura del Proyecto
+
+```text
+PrincipiosSolid/
+├── src/com/solid/
+│   ├── srp/                   # 1. Single Responsibility Principle
+│   │   ├── bad/               # Violación: Invoice con cálculo, impresión y base de datos
+│   │   ├── good/              # Solución: Invoice, InvoiceRepository, InvoicePrinter
+│   │   └── SrpDemo.java       # Demostración ejecutable
+│   │
+│   ├── ocp/                   # 2. Open/Closed Principle
+│   │   ├── bad/               # Violación: PaymentProcessor con if/else encadenados
+│   │   ├── good/              # Solución: Interfaz PaymentMethod y clases polimórficas
+│   │   └── OcpDemo.java       # Demostración ejecutable
+│   │
+│   ├── lsp/                   # 3. Liskov Substitution Principle
+│   │   ├── bad/               # Violación: FixedDepositAccount lanzando excepción en withdraw()
+│   │   ├── good/              # Solución: Separación entre Account y WithdrawableAccount
+│   │   └── LspDemo.java       # Demostración ejecutable
+│   │
+│   ├── isp/                   # 4. Interface Segregation Principle
+│   │   ├── bad/               # Violación: MultiFunctionDevice gigante que fuerza métodos no soportados
+│   │   ├── good/              # Solución: Interfaces finas (Printer, Scanner, Fax)
+│   │   └── IspDemo.java       # Demostración ejecutable
+│   │
+│   ├── dip/                   # 5. Dependency Inversion Principle
+│   │   ├── bad/               # Violación: OrderService acoplado a SmtpEmailSender
+│   │   ├── good/              # Solución: OrderService depende de NotificationChannel (abstracción)
+│   │   └── DipDemo.java       # Demostración ejecutable
+│   │
+│   └── Main.java              # Ejecutor global de todas las demostraciones
+└── README.md
+```
+
+---
+
+## 1. S — Single Responsibility Principle (SRP)
+> *"Una clase debe tener una, y solo una, razón para cambiar."*
+
+- **El Problema (`bad.Invoice`)**: La clase calcula totales e impuestos, formatea e imprime la factura por consola y además guarda el registro en la base de datos. Si cambia el motor de base de datos, el formato del informe o el cálculo fiscal, esta misma clase se ve modificada.
+- **La Solución (`good`)**:
+  - `Invoice`: Maneja exclusivamente el estado de la factura y su lógica de negocio.
+  - `InvoicePrinter`: Se encarga exclusivamente de formatear y presentar la factura.
+  - `InvoiceRepository`: Se encarga de la persistencia de datos.
+
+---
+
+## 2. O — Open/Closed Principle (OCP)
+> *"Las entidades de software deben estar abiertas para la extensión, pero cerradas para la modificación."*
+
+- **El Problema (`bad.PaymentProcessor`)**: Cada vez que el negocio requiere un nuevo medio de pago (PayPal, Cripto, etc.), hay que abrir y modificar la clase `PaymentProcessor` agregando ramas condicionales `if-else` o `switch`, con riesgo de romper código existente.
+- **La Solución (`good`)**:
+  - Se define la abstracción `PaymentMethod` con el método `pay(double amount)`.
+  - Cada método de pago (`CreditCardPayment`, `PayPalPayment`, `CryptoPayment`) implementa la interfaz.
+  - `PaymentProcessor` orquesta el pago a través de la abstracción sin importar qué método se agregue en el futuro.
+
+---
+
+## 3. L — Liskov Substitution Principle (LSP)
+> *"Si S es un subtipo de T, los objetos de tipo T pueden ser sustituidos por objetos de tipo S sin alterar el funcionamiento del programa."*
+
+- **El Problema (`bad.FixedDepositAccount`)**: La clase base `BankAccount` define el método `withdraw()`. La subclase `FixedDepositAccount` (plazo fijo) sobreescribe `withdraw()` lanzando una excepción `UnsupportedOperationException`. Cualquier cliente que espere un `BankAccount` fallará en tiempo de ejecución.
+- **La Solución (`good`)**:
+  - Se define `Account` con las operaciones comunes (`deposit()`, `getBalance()`).
+  - Se define `WithdrawableAccount` que extiende `Account` y añade `withdraw()`.
+  - `SavingsAccount` implementa `WithdrawableAccount`.
+  - `FixedDepositAccount` implementa solo `Account`. Ningún cliente que realice retiros aceptará una cuenta que no garantice contractualmente esa capacidad.
+
+---
+
+## 4. I — Interface Segregation Principle (ISP)
+> *"Los clientes no deben verse obligados a depender de interfaces que no utilizan."*
+
+- **El Problema (`bad.MultiFunctionDevice`)**: Una interfaz monolítica agrupa `print()`, `scan()` y `fax()`. Una impresora básica económica se ve forzada a implementar métodos que físicamente no puede cumplir, viéndose obligada a lanzar excepciones o dejar métodos vacíos.
+- **La Solución (`good`)**:
+  - Se segregan interfaces cohesivas: `Printer`, `Scanner`, `Fax`.
+  - `BasicPrinter` solo implementa `Printer`.
+  - `AllInOneOfficeMachine` compone e implementa `Printer`, `Scanner` y `Fax`.
+
+---
+
+## 5. D — Dependency Inversion Principle (DIP)
+> *"1. Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones."*  
+> *"2. Las abstracciones no deben depender de los detalles. Los detalles deben depender de las abstracciones."*
+
+- **El Problema (`bad.OrderService`)**: La clase de alto nivel `OrderService` instancia directamente `new SmtpEmailSender()`. Está rígidamente acoplada a una implementación técnica de infraestructura; no se puede reemplazar fácilmente por SMS o Slack, ni se puede aislar para pruebas unitarias (unit tests).
+- **La Solución (`good`)**:
+  - Se crea la abstracción `NotificationChannel`.
+  - Los canales concretos (`EmailNotificationChannel`, `SmsNotificationChannel`, `SlackNotificationChannel`) implementan la abstracción.
+  - `OrderService` recibe su dependencia vía inyección de dependencias por constructor.
+
+---
+
+## 🚀 Compilación y Ejecución
+
+Para compilar y ejecutar todo el proyecto desde la terminal:
+
+```bash
+# Compilar todo el código fuente en la carpeta bin/
+mkdir -p bin
+javac -d bin $(find src -name "*.java")
+
+# Ejecutar el orquestador principal
+java -cp bin com.solid.Main
+```
+
+También es posible ejecutar cada principio por separado si se desea:
+
+```bash
+# Ejecutar solo la demo de DIP, por ejemplo:
+java -cp bin com.solid.dip.DipDemo
+```
+

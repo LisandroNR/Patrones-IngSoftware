@@ -20,6 +20,7 @@ Se enfocan en los mecanismos de creación de objetos.
 *   **Adapter:** Permite la colaboración entre objetos con interfaces incompatibles. Separa la lógica de traducción de la lógica de negocio.
 *   **Decorator:** Permite comprimir y encriptar información sensible, independientemente del código que utilice esos datos. Suma comportamientos a un objeto sin tener que crear subclases nuevas.
 *   **Facade:** Proporciona una interfaz simplificada a una biblioteca, un framework o cualquier otro grupo complejo de clases. 
+*   **Proxy:** Proporciona un sustituto o intermediario para controlar el acceso a un objeto, permitiendo realizar operaciones como carga perezosa (lazy loading) o almacenamiento en caché. 
 
 ### Patrones de Comportamiento
 *   **Chain of Responsibility:** Permite pasar solicitudes a lo largo de una cadena de manejadores. Cada clase se encarga de realizar una única tarea sobre la solicitud.
@@ -100,6 +101,18 @@ ReadyState, PlayingState, LockedState (Estados Concretos): Implementan las reacc
 
 * **Punto de Entrada:** MainState.java.
 
+### 9. Patrón Proxy (Estructural)
+* **Propósito:** Proporcionar un intermediario o sustituto de otro objeto para controlar el acceso al mismo. Permite postergar operaciones pesadas hasta que sean realmente necesarias (carga perezosa o lazy loading) y almacenar resultados en memoria (caché) para optimizar el rendimiento.
+* **Ubicación:** Carpeta `Proxy/`.
+* **Estructura implementada:**
+`Imagen` (Interfaz Común): Define el contrato estándar (`mostrar()`) que deben cumplir tanto el objeto real como el proxy.
+
+`ImagenReal` (Sujeto Real): Objeto que realiza la operación costosa (simula la lectura y carga de una imagen pesada en memoria desde el almacenamiento).
+
+`ImagenProxy` (Proxy): Intermediario que mantiene una referencia a `ImagenReal`. Solo instancia y carga la imagen real la primera vez que se solicita su visualización, reutilizándola en llamadas posteriores para no repetir la carga pesada.
+
+`MainProxy` (Cliente): Interactúa con la interfaz `Imagen` a través del proxy sin necesidad de conocer los detalles de la carga pesada ni cuándo se realiza.
+* **Punto de Entrada:** `MainProxy.java`.
 ### 9. Patrón Command (Comportamiento)
 * **Propósito:** Encapsular una solicitud como un objeto independiente, permitiendo parametrizar clientes con diferentes peticiones, encolar operaciones y desacoplar por completo al objeto que invoca la acción (el control remoto) del objeto que la ejecuta (el receptor / la luz).
 * **Ubicación:** Carpeta `Command/`.
@@ -130,6 +143,11 @@ El código fuente de este proyecto está desarrollado en **Java**. Para ejecutar
 
 3. **Ejecutar los patrones:**
    Cada patrón de diseño se encuentra encapsulado en su propia subcarpeta.
+   Por ejemplo, para compilar y ejecutar el patrón **Proxy**:
+   ```bash
+   javac Proxy/*.java
+   java Proxy.MainProxy
+   ```
    Por ejemplo, para compilar y ejecutar el patrón **Command**:
    ```bash
    javac Command/*.java

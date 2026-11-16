@@ -25,6 +25,7 @@ Se enfocan en los mecanismos de creación de objetos.
 ### Patrones de Comportamiento
 *   **Chain of Responsibility:** Permite pasar solicitudes a lo largo de una cadena de manejadores. Cada clase se encarga de realizar una única tarea sobre la solicitud.
 *   **Command:** Convierte una solicitud o petición en un objeto independiente que contiene toda la información sobre la misma, permitiendo parametrizar objetos con diferentes operaciones, poner en cola solicitudes y desacoplar al emisor del receptor.
+*   **Interpreter:** Permite definir la gramática de un lenguaje sencillo y un intérprete que evalúa sus oraciones, representando cada regla como una clase dentro de un árbol sintáctico.
 *   **Memento:** Permite guardar y restaurar el estado previo de un objeto sin revelar los detalles de su implementación.
 *   **Observer:** Permite definir un mecanismo de suscripción para notificar a varios objetos sobre cualquier evento que les suceda al objeto que están observando.
 *   **State:** Permite a un objeto alterar su comportamiento cuando su estado interno cambia. Sustituye extensas cadenas de switch o if-else dependientes del estado por polimorfismo limpio.
@@ -128,6 +129,21 @@ ReadyState, PlayingState, LockedState (Estados Concretos): Implementan las reacc
 `MainCommand` (Cliente): Configura el receptor, crea los comandos y los asocia al invocador para poner a prueba el desacoplamiento.
 * **Punto de Entrada:** `MainCommand.java`.
 
+### 10. Patrón Interpreter (Comportamiento)
+* **Propósito:** Definir una representación para la gramática de un lenguaje junto con un intérprete que la utiliza para evaluar oraciones de ese lenguaje. Cada regla de la gramática se modela como una clase, y una oración se representa como un Árbol de Sintaxis Abstracta (AST) que se evalúa de forma recursiva.
+* **Ubicación:** Carpeta `Interpreter/`.
+* **Estructura implementada:**
+`Expresion` (AbstractExpression): Interfaz común para todos los nodos del árbol sintáctico. Declara el método `interpretar(Contexto)`.
+
+`Numero` y `Variable` (TerminalExpression): Hojas del árbol. `Numero` devuelve su propio valor literal y `Variable` consulta su valor en el contexto.
+
+`Suma` y `Multiplicacion` (NonterminalExpression): Reglas compuestas que agregan dos subexpresiones, las interpretan recursivamente y combinan sus resultados.
+
+`Contexto` (Context): Almacena la información global necesaria durante la interpretación (los valores asignados a cada variable).
+
+`MainInterpreter` (Cliente): Construye el árbol sintáctico de la expresión `(x + 2) * y`, inicializa el contexto y dispara la evaluación llamando a `interpretar()`. Demuestra que el mismo árbol produce distintos resultados al cambiar el contexto.
+* **Punto de Entrada:** `MainInterpreter.java`.
+
 ## 🚀 Instrucciones de Ejecución
 
 El código fuente de este proyecto está desarrollado en **Java**. Para ejecutar los ejemplos de implementación de cada patrón, sigue estos pasos:
@@ -152,6 +168,11 @@ El código fuente de este proyecto está desarrollado en **Java**. Para ejecutar
    ```bash
    javac Command/*.java
    java Command.MainCommand
+   ```
+   Por ejemplo, para compilar y ejecutar el patrón **Interpreter**:
+   ```bash
+   javac Interpreter/*.java
+   java Interpreter.MainInterpreter
    ```
 
 # Ejemplos Prácticos de los Principios S.O.L.I.D. en Java

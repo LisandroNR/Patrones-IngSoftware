@@ -1,9 +1,9 @@
-// 1. Interfaz Mediador: Declara el método de comunicación con los componentes.
+// 1. Interfaz Mediador: Define cómo los componentes se comunicarán con él.
 public interface Mediator {
     void notify(Component sender, String event);
 }
 
-// 2. Componente Base: Almacena la referencia al mediador.
+// 2. Clase Base Componente: Todos los componentes conocen a su mediador, pero no a otros componentes.
 public abstract class Component {
     protected Mediator mediator;
 
@@ -12,83 +12,105 @@ public abstract class Component {
     }
 }
 
-// 3. Componentes Concretos: No dependen de otros componentes, solo del mediador.
-public class Button extends Component {
+// 3. Componentes Concretos: Hacen su trabajo y notifican al mediador.
+
+class Checkbox extends Component {
+    private boolean isCorporate = false;
+
+    public void toggle() {
+        isCorporate = !isCorporate;
+        System.out.println("Checkbox: Estado cambiado a " + (isCorporate ? "Empresa" : "Individuo"));
+        // Notifica al mediador que hubo un cambio
+        mediator.notify(this, "check"); 
+    }
+
+    public boolean isCorporate() {
+        return isCorporate;
+    }
+}
+
+class TextField extends Component {
+    private String name;
+    private boolean visible = true;
+
+    public TextField(String name) {
+        this.name = name;
+    }
+
+    public void setVisibility(boolean visible) {
+        this.visible = visible;
+        System.out.println("TextField (" + name + "): Visibilidad cambiada a " + visible);
+    }
+}
+
+class Button extends Component {
     public void click() {
-        System.out.println("Componente Botón: Clickeado.");
+        System.out.println("Button: Usuario hizo clic en 'Registrar'");
         mediator.notify(this, "click");
     }
 }
 
-public class TextBox extends Component {
-    private String text = "";
+// 4. Mediador Concreto: Encapsula la lógica de negocio y coordina a los componentes.
+public class RegistrationForm implements Mediator {
+    private Checkbox corporateCheckbox;
+    private TextField dniField;
+    private TextField cuitField;
+    private Button submitButton;
 
-    public void setText(String text) {
-        this.text = text;
-        System.out.println("Componente TextBox: Texto actualizado a '" + text + "'.");
-        mediator.notify(this, "textChanged");
-    }
-
-    public void save() {
-        System.out.println("Componente TextBox: Guardando datos en la base de datos...");
-    }
-}
-
-public class Checkbox extends Component {
-    private boolean checked = false;
-
-    public void check() {
-        this.checked = true;
-        System.out.println("Componente Checkbox: Marcado.");
-        mediator.notify(this, "check");
-    }
-}
-
-// 4. Mediador Concreto: Encapsula la lógica de interacción entre componentes.
-public class AuthenticationDialog implements Mediator {
-    private Button loginButton;
-    private TextBox usernameTextBox;
-    private Checkbox rememberMeCheckbox;
-
-    public AuthenticationDialog(Button loginButton, TextBox usernameTextBox, Checkbox rememberMeCheckbox) {
-        this.loginButton = loginButton;
-        this.loginButton.setMediator(this);
+    // El mediador registra los componentes y se asigna a sí mismo como su mediador.
+    public RegistrationForm(Checkbox corporateCheckbox, TextField dniField, TextField cuitField, Button submitButton) {
+        this.corporateCheckbox = corporateCheckbox;
+        this.corporateCheckbox.setMediator(this);
         
-        this.usernameTextBox = usernameTextBox;
-        this.usernameTextBox.setMediator(this);
+        this.dniField = dniField;
+        this.dniField.setMediator(this);
         
-        this.rememberMeCheckbox = rememberMeCheckbox;
-        this.rememberMeCheckbox.setMediator(this);
+        this.cuitField = cuitField;
+        this.cuitField.setMediator(this);
+        
+        this.submitButton = submitButton;
+        this.submitButton.setMediator(this);
     }
 
     @Override
     public void notify(Component sender, String event) {
-        if (sender == loginButton && event.equals("click")) {
-            System.out.println("Mediador: Reaccionando al clic del botón. Iniciando proceso de guardado.");
-            usernameTextBox.save();
+        // Lógica de coordinación: Si el checkbox cambia...
+        if (sender == corporateCheckbox && event.equals("check")) {
+            if (corporateCheckbox.isCorporate()) {
+                dniField.setVisibility(false);
+                cuitField.setVisibility(true);
+            } else {
+                dniField.setVisibility(true);
+                cuitField.setVisibility(false);
+            }
         }
-        
-        if (sender == rememberMeCheckbox && event.equals("check")) {
-            System.out.println("Mediador: Reaccionando al checkbox. Autocompletando usuario por defecto.");
-            usernameTextBox.setText("usuario_admin");
+
+        // Lógica de coordinación: Si se hace clic en el botón...
+        if (sender == submitButton && event.equals("click")) {
+            System.out.println("Mediador: Validando campos y enviando formulario a la base de datos...\n");
         }
     }
 }
 
-// 5. Código Cliente: Crea los componentes y el mediador, vinculándolos.
+// 5. Cliente: Configura la aplicación.
 public class Main {
     public static void main(String[] args) {
-        Button button = new Button();
-        TextBox textBox = new TextBox();
+        // Instanciamos los componentes de forma independiente.
         Checkbox checkbox = new Checkbox();
+        TextField dniField = new TextField("DNI");
+        TextField cuitField = new TextField("CUIT");
+        Button button = new Button();
 
-        // El mediador organiza la relación. Los componentes no se conocen entre sí.
-        Mediator dialog = new AuthenticationDialog(button, textBox, checkbox);
+        // Creamos el mediador y le pasamos los componentes.
+        Mediator formMediator = new RegistrationForm(checkbox, dniField, cuitField, button);
 
-        System.out.println("--- El usuario marca la casilla 'Recordarme' ---");
-        checkbox.check();
+        System.out.println("--- Escenario 1: El usuario cambia a cuenta de 'Empresa' ---");
+        checkbox.toggle();
 
-        System.out.println("\n--- El usuario hace clic en el botón de 'Login' ---");
+        System.out.println("\n--- Escenario 2: El usuario vuelve a cuenta de 'Individuo' ---");
+        checkbox.toggle();
+
+        System.out.println("\n--- Escenario 3: El usuario envía el formulario ---");
         button.click();
     }
 }
